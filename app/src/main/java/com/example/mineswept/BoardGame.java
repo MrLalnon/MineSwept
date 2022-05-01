@@ -336,7 +336,6 @@ public class BoardGame extends View {
                 switch (which){
                     case DialogInterface.BUTTON_POSITIVE:
                         dialog.dismiss();
-                        int a;
                         break;
 
                     case DialogInterface.BUTTON_NEGATIVE:
