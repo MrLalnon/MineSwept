@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.icu.util.Output;
 import android.os.CountDownTimer;
+import android.text.Html;
 import android.util.Log;
 import android.util.Size;
 import android.view.GestureDetector;
@@ -336,7 +337,6 @@ public class BoardGame extends View {
                 switch (which){
                     case DialogInterface.BUTTON_POSITIVE:
                         dialog.dismiss();
-                        int a;
                         break;
 
                     case DialogInterface.BUTTON_NEGATIVE:
@@ -347,7 +347,7 @@ public class BoardGame extends View {
         };
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setMessage("Save your Score?\n" + this.toString()).setPositiveButton("Yes", dialogClickListener)
+        builder.setMessage(Html.fromHtml("Save your Score?<br>" + this.toString())).setPositiveButton("Yes", dialogClickListener)
                 .setNegativeButton("No", dialogClickListener).show();
     }
 
@@ -357,6 +357,7 @@ public class BoardGame extends View {
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         StringBuilder OutputString = new StringBuilder();
         OutputString.append(formatter.format(date) + " | ");
+        OutputString.append("<b>");
         if(sizeW == 9 && population == 10)
             OutputString.append("Beginner");
         else if (sizeW == 16 && population == 40)
@@ -365,6 +366,7 @@ public class BoardGame extends View {
             OutputString.append("Expert");
         else
             OutputString.append("Size: " + sizeW + " | " + "Mines: " + population);
+        OutputString.append("</b>");
         OutputString.append(" | " + "Time: " + (time/60+":"+time%60));
         Log.d("seem",OutputString.toString());
         return OutputString.toString();
