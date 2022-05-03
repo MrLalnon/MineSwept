@@ -23,6 +23,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import java.util.Objects;
+
 public class MainActivity extends AppCompatActivity {
     FrameLayout frameLayout;
     BoardGame boardGame;
@@ -51,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         frameLayout.addView(boardGame);
 
         db = Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class, "gameDatabase").enableMultiInstanceInvalidation().build();
+                AppDatabase.class, "gameDatabase").enableMultiInstanceInvalidation().allowMainThreadQueries().build();
         gameDao = db.gameDao();
     }
 
@@ -143,14 +145,14 @@ public class MainActivity extends AppCompatActivity {
                         dialog.dismiss();
                         break;
                     case DialogInterface.BUTTON_NEGATIVE:
-                        dialog.dismiss();
+                        gameDao.ClearGames();
                         break;
                 }
             }
         };
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
-        builder.setMessage(Html.fromHtml("<h1>Fastest Mine Sweeps</h1><br>" + gameDao.GetLatestGame().toString())).setPositiveButton("Yes", dialogClickListener)
-                .setNegativeButton("No", dialogClickListener).show();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(Html.fromHtml("<h1>Fastest Mine Sweeps</h1><br>" + Objects.toString(gameDao.GetLatestGame(),""))).setPositiveButton("OK", dialogClickListener)
+                .setNegativeButton("Reset Scores", dialogClickListener).show();
     }
 }

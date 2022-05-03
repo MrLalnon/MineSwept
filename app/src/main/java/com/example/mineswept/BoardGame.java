@@ -83,7 +83,7 @@ public class BoardGame extends View {
         };
 
         db = Room.databaseBuilder(context,
-                AppDatabase.class, "gameDatabase").enableMultiInstanceInvalidation().build();
+                AppDatabase.class, "gameDatabase").enableMultiInstanceInvalidation().allowMainThreadQueries().build();
         gameDao = db.gameDao();
     }
 
