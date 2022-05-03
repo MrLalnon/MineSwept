@@ -1,13 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/instructions"
-        android:title="Instructions"/>
-    <item android:id="@+id/beginner"
-        android:title="Beginner"/>
-    <item android:id="@+id/intermediate"
-        android:title="Intermediate" />
-    <item android:id="@+id/expert"
-        android:title="Expert" />
-    <item android:id="@+id/custom"
-        android:title="Custom..." />
+    <group android:id="@+id/instructionsGroup">
+        <item
+            android:id="@+id/instructions"
+            android:title="Instructions" />
+    </group>
+
+    <group android:id="@+id/difficulty">
+        <item
+            android:id="@+id/beginner"
+            android:title="Beginner" />
+        <item
+            android:id="@+id/intermediate"
+            android:title="Intermediate" />
+        <item
+            android:id="@+id/expert"
+            android:title="Expert" />
+        <item
+            android:id="@+id/custom"
+            android:title="Custom..." />
+    </group>
+
+    <group android:id="@+id/scores">
+        <item
+            android:id="@+id/highscores"
+            android:title="Best Times..."/>
+    </group>
 </menu>

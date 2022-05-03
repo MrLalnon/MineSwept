@@ -17,6 +17,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.room.Room;
+
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -39,6 +41,9 @@ public class BoardGame extends View {
     TextView txtTimer;
     CountDownTimer CountDown;
     int[] LastCellPressed = new int[]{-1,-1};
+    AppDatabase db;
+    GameDao gameDao;
+    Date date;
 
     public BoardGame(Context context, View[] views)
     {
@@ -76,6 +81,10 @@ public class BoardGame extends View {
 
             }
         };
+
+        db = Room.databaseBuilder(context,
+                AppDatabase.class, "gameDatabase").enableMultiInstanceInvalidation().build();
+        gameDao = db.gameDao();
     }
 
     @Override
@@ -336,9 +345,8 @@ public class BoardGame extends View {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which){
                     case DialogInterface.BUTTON_POSITIVE:
-                        dialog.dismiss();
+                        gameDao.insertGame(new Game(gameDao.GetLatestId()+1, date,sizeW, population, time));
                         break;
-
                     case DialogInterface.BUTTON_NEGATIVE:
                         dialog.dismiss();
                         break;
@@ -353,7 +361,7 @@ public class BoardGame extends View {
 
     @Override
     public String toString(){
-        Date date = new Date();
+        date = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         StringBuilder OutputString = new StringBuilder();
         OutputString.append(formatter.format(date) + " | ");

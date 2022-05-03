@@ -1,6 +1,8 @@
 package com.example.mineswept;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.MenuCompat;
+import androidx.room.Room;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -8,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
     Button btnReset;
     TextView txtBombCount;
     TextView txtTimer;
+    AppDatabase db;
+    GameDao gameDao;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +49,10 @@ public class MainActivity extends AppCompatActivity {
         frameLayout=findViewById(R.id.frame);
         boardGame = new BoardGame(this, new View[]{btnReset, txtBombCount, txtTimer});
         frameLayout.addView(boardGame);
+
+        db = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class, "gameDatabase").enableMultiInstanceInvalidation().build();
+        gameDao = db.gameDao();
     }
 
     public void Reset(View view) {
@@ -65,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.difficultymenu, menu);
+        MenuCompat.setGroupDividerEnabled(menu, true);
         return true;
     }
 
@@ -82,6 +93,10 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.custom:
                 customField(boardGame);
+                return true;
+            case R.id.highscores:
+                highscores();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -119,5 +134,23 @@ public class MainActivity extends AppCompatActivity {
         alert.show();
     }
 
+    public void highscores(){
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        dialog.dismiss();
+                        break;
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        dialog.dismiss();
+                        break;
+                }
+            }
+        };
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+        builder.setMessage(Html.fromHtml("<h1>Fastest Mine Sweeps</h1><br>" + gameDao.GetLatestGame().toString())).setPositiveButton("Yes", dialogClickListener)
+                .setNegativeButton("No", dialogClickListener).show();
+    }
 }
