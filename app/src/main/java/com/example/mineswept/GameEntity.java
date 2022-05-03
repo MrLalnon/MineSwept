@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey;
 import java.util.Date;
 
 @Entity
-public class Game{
+public class GameEntity {
     @PrimaryKey(autoGenerate = true)
     public int id;
 
